@@ -12,11 +12,7 @@ Usage
 -----
 
 Usage: parahash [OPTION] [FILE]
-  -dtlen int
-    	the length of the document title (default 8)
-  -outfile string
-    	the file to write to (defaults to stdout)
-  -ptlen int
-    	the length of a paragraph title (default 4)
-  -rep string
-    	the representation for hashes - hex, base58 or bip39 (default "hex")
+  -dtlen=8: the length of the document title (in words or digits)
+  -outfile="": the file to write to (defaults to stdout)
+  -ptlen=4: the length of a paragraph title (in words or digits
+  -rep="hex": the representation for hashes - hex, base58, bip39 or proquint

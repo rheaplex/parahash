@@ -10,6 +10,7 @@ import (
 	"flag"
 	"fmt"
 	"encoding/hex"
+	"github.com/bren2010/proquint"
 	"github.com/tv42/base58"
 	"github.com/tyler-smith/go-bip39"
 	"hash"
@@ -71,7 +72,9 @@ func hashString(hasher hash.Hash, hashRep string) string {
 		str = string(rep)
 	} else if hashRep == "bip39" {
 		str, _ = bip39.NewMnemonic(hasher.Sum(nil)[:])
-	} else {
+	} else if hashRep == "proquint" {
+        str = proquint.Encode(hasher.Sum(nil)[:])
+    } else {
 		// Convert [32]byte to []byte
 		str = hex.EncodeToString(hasher.Sum(nil)[:])
 	}
@@ -108,7 +111,10 @@ func truncateHashRep (hashstr string, hashSliceLength int) string {
 		if (strings.Contains(hashstr, " ")) {
 			words := strings.Split(hashstr, " " )
 			hashstr = strings.Join(words[:hashSliceLength], " ")
-		} else {
+		} else if (strings.Contains(hashstr, "-")) {
+			words := strings.Split(hashstr, "-" )
+			hashstr = strings.Join(words[:hashSliceLength], "-")
+        } else {
 			hashstr = hashstr[:hashSliceLength]
 		}
 	}
@@ -148,9 +154,9 @@ func main() {
 	}
 
 	hashRep := flag.String("rep", "hex",
-		"the representation for hashes - hex, base58 or bip39")
-	paraTitleLength := flag.Int("ptlen", 4, "the length of a paragraph title")
-	docTitleLength := flag.Int("dtlen", 8, "the length of the document title")
+		"the representation for hashes - hex, base58, bip39 or proquint")
+	paraTitleLength := flag.Int("ptlen", 4, "the length of a paragraph title (in words or digits")
+	docTitleLength := flag.Int("dtlen", 8, "the length of the document title (in words or digits)")
 	outfilepath := flag.String("outfile", "",
 		"the file to write to (defaults to stdout)")
 	flag.Parse()
